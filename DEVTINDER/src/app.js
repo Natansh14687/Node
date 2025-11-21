@@ -1,37 +1,23 @@
 const express = require("express");
 const app = express();
 
-// app.use("/admin", (req, res, next)=>{
-//     console.log("We're in /admin/getdata route");
-//     const token = "xyz";
-//     const adiminAuthentication = token === "xyz";
-//     if(!adiminAuthentication){
-//         res.status(401).send("UnAuthorised Access");
-//     }else{
-//         next();
-//     }
-// })
-
-app.get("/admin/getdata", (req, res) => {
-    console.log("We're in /admin/getdata route");
+app.use("/admin", (req, res, next)=>{
+    console.log("We're in /admin route");
     const token = "xyz";
     const adiminAuthentication = token === "xyz";
     if(!adiminAuthentication){
         res.status(401).send("UnAuthorised Access");
     }else{
-        res.send("You are logged in to admin dashboard");
+        next();
     }
 })
 
+app.get("/admin/getdata", (req, res) => {
+    res.send("logged in to admin dashboard to get data");
+})
+
 app.post("/admin/postdata", (req, res) => {
-    console.log("We're in /admin/getdata route");
-    const token = "xyz";
-    const adiminAuthentication = token === "xyz";
-    if(!adiminAuthentication){
-        res.status(401).send("UnAuthorised Access");
-    }else{
-        res.send("You are logged in to admin dashboard");
-    }
+    res.send("logged in to admin dashboard to post data");
 })
 
 
