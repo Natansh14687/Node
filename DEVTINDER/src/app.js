@@ -1,16 +1,9 @@
 const express = require("express");
 const app = express();
 
-app.use("/admin", (req, res, next)=>{
-    console.log("We're in /admin route");
-    const token = "xyz";
-    const adiminAuthentication = token === "xyz";
-    if(!adiminAuthentication){
-        res.status(401).send("UnAuthorised Access");
-    }else{
-        next();
-    }
-})
+const {adminAuth, userAuth} = require("../middlewares/auth");
+
+app.use("/admin", adminAuth);
 
 app.get("/admin/getdata", (req, res) => {
     res.send("logged in to admin dashboard to get data");
@@ -18,6 +11,10 @@ app.get("/admin/getdata", (req, res) => {
 
 app.post("/admin/postdata", (req, res) => {
     res.send("logged in to admin dashboard to post data");
+})
+
+app.get("/user/profile", userAuth, (req, res)=>{
+    res.send("You have got profile data");
 })
 
 
