@@ -1,8 +1,15 @@
 const express = require("express");
 const app = express();
 
-require("./config/database");
+const connectDB = require("./config/database");
 
-app.listen(7777, ()=>{
-    console.log("app is listening on server 7777");
+connectDB()
+.then(()=>{
+    console.log("Database connected successfully");
+    app.listen(7777, ()=>{
+        console.log("app is listening on server 7777");
+    })
+}).catch((err)=>{
+    console.log("Database can't be connected");
 })
+
