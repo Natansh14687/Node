@@ -1,22 +1,37 @@
 const express = require("express");
 const app = express();
 
-app.get("/user",(req, res, next)=>{
-    console.log("/user route is handling response 1");
-    next() 
-    res.send("This is result from 1st response");   
-}, (req, res, next)=>{
-    console.log("/user route is handling response 2");
-    res.send("This is result from 2nd response");
+// app.use("/admin", (req, res, next)=>{
+//     console.log("We're in /admin/getdata route");
+//     const token = "xyz";
+//     const adiminAuthentication = token === "xyz";
+//     if(!adiminAuthentication){
+//         res.status(401).send("UnAuthorised Access");
+//     }else{
+//         next();
+//     }
+// })
+
+app.get("/admin/getdata", (req, res) => {
+    console.log("We're in /admin/getdata route");
+    const token = "xyz";
+    const adiminAuthentication = token === "xyz";
+    if(!adiminAuthentication){
+        res.status(401).send("UnAuthorised Access");
+    }else{
+        res.send("You are logged in to admin dashboard");
+    }
 })
 
-app.use("/hello", (req, res, next)=>{
-    console.log("This is log 1 from route /hello");
-    next();
-});
-app.get("/hello", (req, res, next)=>{
-    console.log("This is log 2 from route /hello");
-    res.send("This is response from route hello app.get")
+app.post("/admin/postdata", (req, res) => {
+    console.log("We're in /admin/getdata route");
+    const token = "xyz";
+    const adiminAuthentication = token === "xyz";
+    if(!adiminAuthentication){
+        res.status(401).send("UnAuthorised Access");
+    }else{
+        res.send("You are logged in to admin dashboard");
+    }
 })
 
 
