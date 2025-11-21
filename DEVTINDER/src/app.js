@@ -1,16 +1,24 @@
 const express = require("express");
 const app = express();
 
-app.get("/user",(req, res)=>{
-    console.log(req.query);
-    res.send({firstName:"Natansh", lastName:"Khurana"});
-    
+app.get("/user",(req, res, next)=>{
+    console.log("/user route is handling response 1");
+    next() 
+    res.send("This is result from 1st response");   
+}, (req, res, next)=>{
+    console.log("/user route is handling response 2");
+    res.send("This is result from 2nd response");
 })
 
-app.get("/hello/:userid/:name/:password",(req, res)=>{
-    console.log(req.params);
-    res.send("Server is running");
+app.use("/hello", (req, res, next)=>{
+    console.log("This is log 1 from route /hello");
+    next();
+});
+app.get("/hello", (req, res, next)=>{
+    console.log("This is log 2 from route /hello");
+    res.send("This is response from route hello app.get")
 })
+
 
 
 app.listen(7777, ()=>{
