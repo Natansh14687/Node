@@ -14,7 +14,7 @@ app.post("/signup", async (req, res)=>{
         await user.save();
         res.send("user data sent to the database successfully");
     }catch(err){
-        res.send("unable to connect to the database");
+        res.status(400).send("user can't be signed up " + err.message);
     }
 })
 
@@ -93,14 +93,14 @@ app.delete("/userbyfirstname", async (req, res)=>{
     }
 })
 
-app.patch("/user", async (req, res) => {
+app.patch("/user/:id", async (req, res) => {
     const data = req.body;
-    const id = req.body.id;
+    const id = req.params.id;
     console.log(data);
     
 
     try{
-        const user = await User.findByIdAndUpdate(id, {firstName : data.firstName});
+        const user = await User.findByIdAndUpdate(id, {emailId : data.emailId, password : data.password}, {runValidators : true});
         res.send("user " + user + " updated successfully");
     }catch(err){
         console.error("User can't be updated");
@@ -113,7 +113,7 @@ app.patch("/userbydesc", async (req, res) => {
     
 
     try{
-        const user = await User.findOneAndUpdate({description : data.description}, {firstName : data.firstName}, {returnDocument : 'after'});
+        const user = await User.findOneAndUpdate({description : data.description}, {firstName : data.firstName}, {returnDocument : 'after', runValidators : true});
         res.send("user " + user + " updated successfully");
     }catch(err){
         console.error("User can't be updated");
