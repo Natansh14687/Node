@@ -94,16 +94,25 @@ app.delete("/userbyfirstname", async (req, res)=>{
 })
 
 app.patch("/user/:id", async (req, res) => {
+    
     const data = req.body;
     const id = req.params.id;
     console.log(data);
     
 
     try{
-        const user = await User.findByIdAndUpdate(id, {emailId : data.emailId, password : data.password}, {runValidators : true});
+        updateFields = ["firstName", "lastName", "age", "description", "skills", "photoURL"];
+        const isUpdateAllowed = Object.keys(data).every((k) => updateFields.includes(k));
+        if(!isUpdateAllowed){
+            throw new Error("field update error, some fields can't be allowed to update");
+        }
+        if(data?.skills.length > 10){
+            throw new Error("Can't insert more than 10 skills");
+        }
+        const user = await User.findByIdAndUpdate(id, data, {runValidators : true});
         res.send("user " + user + " updated successfully");
     }catch(err){
-        console.error("User can't be updated");
+        res.status(400).send("User can't be updated " + err.message);
     }
 });
 
