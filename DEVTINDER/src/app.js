@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 const jwt = require("jsonwebtoken");
+const {userAuth} = require("./middlewares/auth");
 
 const connectDB = require("./config/database");
 const User = require("./models/user");
@@ -44,10 +45,10 @@ app.post("/login", async (req, res) => {
         
         if(isValidPassword){
 
-            const jwtToken = jwt.sign({_id : user._id}, "DEV@TINDER123");
+            const jwtToken = jwt.sign({_id : user._id}, "DEV@TINDER123", { expiresIn: '1h' });
             // console.log(jwtToken);
 
-            const cookie = res.cookie("token", jwtToken);
+            const cookie = res.cookie("token", jwtToken, {expires: new Date(Date.now() + 0.0166 * 3600000)});
 
             res.send("user successfully logged in");
         }else{
@@ -61,18 +62,13 @@ app.post("/login", async (req, res) => {
 
 })
 
-app.get("/profile", async (req, res) => {
+app.get("/profile", userAuth ,(req, res) => {
 
     try{
-        const cookies = req.cookies;
-        const {token} = cookies;
-        
-        const decodedMsg = jwt.verify(token, "DEV@TINDER123");
-        const {_id} = decodedMsg;
 
-        const user = await User.findById(_id);
-        
+        const user = req.user;
         res.send(user);
+
     }catch(err){
         res.status(401).status(err.message);
     }
