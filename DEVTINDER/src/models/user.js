@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
     firstName : {
@@ -54,6 +56,18 @@ const userSchema = new mongoose.Schema({
         type : [String]
     }
 },{ timestamps: true });
+
+
+userSchema.methods.getCookie = function(res){
+    const secretKey = jwt.sign({_id : this._id}, "DEV@TINDER123",{expiresIn : "1h"});
+    const cookie = res.cookie("token", secretKey, {expires: new Date(Date.now() + 0.0166 * 3600000)});
+    return cookie;
+}
+
+userSchema.methods.validatePassword = async function(userPassword){
+    const isValidPassword = await bcrypt.compare(userPassword, this.password);
+    return isValidPassword;
+}
 
 
 module.exports = mongoose.model("User", userSchema);
