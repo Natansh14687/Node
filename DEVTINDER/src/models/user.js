@@ -57,10 +57,12 @@ const userSchema = new mongoose.Schema({
     }
 },{ timestamps: true });
 
+userSchema.index({firstName : 1, lastName : 1});
+
 
 userSchema.methods.getCookie = function(res){
     const secretKey = jwt.sign({_id : this._id}, "DEV@TINDER123",{expiresIn : "1h"});
-    const cookie = res.cookie("token", secretKey, {expires: new Date(Date.now() + 0.0166 * 3600000)});
+    const cookie = res.cookie("token", secretKey, {expires: new Date(Date.now() + 1 * 3600000)});
     return cookie;
 }
 
