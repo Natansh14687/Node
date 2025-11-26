@@ -1,6 +1,10 @@
 const validator = require("validator");
 
 const validateSignupData = (req) => {
+
+    if(!req || !req.body){
+        throw new Error("No data Provided");
+    }
     const {firstName, lastName, emailId, password, age, skills, gender} = req.body;
 
     if(!firstName || !lastName){
@@ -15,9 +19,23 @@ const validateSignupData = (req) => {
     if(age<18){
         throw new Error("Person below less than 18 is now allowed to enter");
     }
-    if(skills.length > 10){
-        throw new Error("Skills can't be more than 10");
-    }
+   
+
+    if(skills!=undefined || skills!=null){
+        if(Array.isArray(skills)){
+            if(skills > 10){
+                throw new Error("Skills can't be more than 10");
+            }
+        }else if(typeof skills === "string"){
+            if(skills.length > 1000){
+                throw new Error("Skills String is too long");
+            }
+        }else{
+            throw new Error("Skills must be an array or string");
+        }
+    };
+
+
     if(!["male", "female", "others"].includes(gender)){
         throw new Error("This gender is not allowed to enter");
     }
