@@ -18,7 +18,7 @@
 - post /request/review/reject
 
 ## user
-- get /user/connections
 - get /user/requests/received
+- get /user/connections
 - get /user/feed
 

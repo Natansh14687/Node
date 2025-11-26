@@ -9,10 +9,12 @@ const User = require("./models/user");
 const authRouter = require("./routers/authRouter");
 const profileRouter = require("./routers/profileRouter");
 const requestRouter = require("./routers/connectionRequestRouter");
+const userRouter = require("./routers/userRouter");
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
+app.use("/", userRouter);
 
 
 connectDB()
